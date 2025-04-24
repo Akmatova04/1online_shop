@@ -1,0 +1,66 @@
+{# templates/registration/signup.html #}
+{% extends "store/base.html" %}
+{% load i18n %}
+{% load static %} {# Керек болушу мүмкүн #}
+
+{% block title %}{% trans "Катталуу" %}{% endblock %}
+
+{% block content %}
+    {# Форманы Dark Mode стилиндеги контейнерге ороо #}
+    <div class="form-container">
+        <h2>{% trans "Жаңы аккаунт түзүү" %}</h2>
+        <p style="text-align: center; margin-bottom: 25px; color: #adb5bd;">{% trans "Сураныч, катталуу үчүн төмөнкү форманы толтуруңуз:" %}</p>
+
+        {# Ката билдирүүлөрү #}
+        {% if messages %}
+            <ul class="messages">
+                 {% for message in messages %} <li class="{{ message.tags }}">{{ message }}</li> {% endfor %}
+            </ul>
+        {% endif %}
+
+        {# Django форма каталарын көрсөтүү (жалпы каталар) #}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger" style="color: #ff6b6b; margin-bottom: 15px; background-color: rgba(220, 53, 69, 0.1); padding: 10px; border-radius: 6px;">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {# Ар бир талааны өзүнчө div.form-group'ка ороо #}
+            {% for field in form %}
+                <div class="form-group">
+                    {# Кыргызча котормосу forms.py'дан келет #}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                    {# Талаанын өзү (input) - form-control классын кошуунун кереги жок, анткени CSS'те .form-group input деп стил бердик #}
+                    {{ field }}
+                    {# Жардамчы текст (мис., username, password талаалары үчүн) #}
+                    {% if field.help_text %}
+                        <small class="help-text">{{ field.help_text|safe }}</small> {# |safe кээ бир HTML тегдерди көрсөтүү үчүн #}
+                    {% endif %}
+                    {# Талаанын каталары #}
+                    {% if field.errors %}
+                        <div class="errors">
+                            {% for error in field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            {# Баскычты да өзүнчө #}
+            <div class="form-group">
+                <button type="submit" class="submit-btn">{% trans "Катталуу" %}</button> {# submit-btn классы CSSте аныкталган #}
+            </div>
+        </form>
+
+        <div class="form-link">
+             {% trans "Аккаунтуңуз барбы?" %} <a href="{% url 'login' %}">{% trans "Кирүү" %}</a>
+         </div>
+
+    </div> {# form-container аягы #}
+{% endblock %}

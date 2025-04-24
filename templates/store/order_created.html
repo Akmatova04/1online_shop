@@ -1,0 +1,43 @@
+{# store/templates/store/order_created.html #}
+{% extends "store/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Буйрутмаңыз үчүн рахмат" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Буйрутмаңыз үчүн рахмат!" %}</h1>
+
+    <div style="background-color: #d4edda; border-color: #c3e6cb; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+        <p style="font-size: 1.1em;">
+            {% blocktrans with order_id=order.id %}
+               Сиздин буйрутмаңыз ийгиликтүү кабыл алынды жана иштетүүгө жөнөтүлдү. <br>
+               Сиздин буйрутма номериңиз: <strong>#{{ order_id }}</strong>.
+            {% endblocktrans %}
+        </p>
+        {# <p>{% trans "Заказдын абалы боюнча маалымат электрондук почтаңызга жөнөтүлөт." %}</p> #}
+        <p>{% trans "Биз сиз менен жакынкы убакта көрсөтүлгөн телефон номери аркылуу байланышабыз." %}</p>
+    </div>
+
+    {# Буйрутманын кыскача маалыматы (милдеттүү эмес, бирок пайдалуу) #}
+    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
+        <h3>{% trans "Буйрутманын кыскача маалыматы" %}</h3>
+        <p><strong>{% trans "Буйрутма ID" %}:</strong> #{{ order.id }}</p>
+        <p><strong>{% trans "Түзүлгөн күнү" %}:</strong> {{ order.created_at|date:"d M Y, H:i" }}</p>
+        <p><strong>{% trans "Жалпы суммасы" %}:</strong> {{ order.total_amount }} сом</p>
+        {% if order.first_name and order.last_name %}
+           <p><strong>{% trans "Алуучу" %}:</strong> {{ order.first_name }} {{ order.last_name }}</p>
+        {% endif %}
+        <p><strong>{% trans "Жеткирүү дареги" %}:</strong> {{ order.shipping_address }}</p>
+        <p><strong>{% trans "Байланыш телефону" %}:</strong> {{ order.guest_phone }}</p>
+    </div>
+
+    <p style="text-align: center;">
+        <a href="{% url 'store:home' %}" class="button" style="padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+            {% trans "Дүкөнгө кайтуу" %}
+        </a>
+        {# TODO: Буйрутма таржымалы барагына шилтеме (эгер колдонуучу системасы болсо) #}
+        {# <a href="#" style="margin-left: 15px;">Буйрутмаларым</a> #}
+    </p>
+
+{% endblock %}

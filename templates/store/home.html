@@ -1,0 +1,100 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Башкы бет - Жаңы стиль{% endblock %}
+
+{% block content %}
+    {# Башкы беттин аталышы #}
+        <h1>Дүкөнүбүзгө кош келиңиз!</h1>
+
+    {# Сиз бул жерге башка мазмун кошсоңуз болот, мисалы издөө формасы #}
+     {# <form> ... </form> #}
+
+    {# 1. Категориялар Бөлүмү (Glovo стили сакталган) #}
+    <section class="section-categories-glovo">
+        <h2>Категориялар</h2> {# Бул h2 жаңы стилди алат #}
+        <div class="category-grid-glovo">
+             {% for category in categories %}
+                {# Категория шилтемеси (бул мурунтан туура) #}
+                <a href="{% url 'store:category_products' category_slug=category.slug %}" class="category-card-glovo">
+                     <div class="img-container">
+                     {% if category.image %}
+                        <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                     {% else %}
+                         <div class="placeholder-icon">🛍️</div> {# Эмодзи же башка иконка #}
+                     {% endif %}
+                     </div>
+                     <span class="name">{{ category.name }}</span>
+                </a>
+             {% empty %}
+                 <p>Категориялар азырынча жок.</p>
+             {% endfor %}
+        </div>
+    </section>
+
+    {# 2. Популярдуу Азыктар Бөлүмү (Категорияга окшош карточкалар менен) #}
+    <section class="section-popular">
+         <h2>Популярдуу Азыктар</h2>
+         <div class="category-grid-glovo product-list-as-category">
+             {% for product in popular_products %}
+                 {# ----- 👇👇👇 БУЛ САТЫР ОҢДОЛДУ 👇👇👇 ----- #}
+                 <a href="{{ product.get_absolute_url }}" class="category-card-glovo product-card-like-category">
+                 {# ----- 👆👆👆 Бул product.get_absolute_url() колдонот 👆👆👆 ----- #}
+                      <div class="img-container product-image">
+                          {% if product.image %}
+                          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                          {% else %}
+                              <div class="placeholder-product">🛒</div>
+                          {% endif %}
+                      </div>
+                      <span class="name product-name">{{ product.name }}</span>
+                      <span class="price product-price">
+                          {% if product.discount_percent > 0 %}
+                              <span class="original-price">{{ product.price }} сом</span>
+                          {% endif %}
+                          {{ product.get_discounted_price }} сом
+                           {# / кг / даана ж.б. кошуу #}
+                           <span class="weight-unit"> / {{ product.weight_unit }}</span>
+                      </span>
+                 </a>
+             {% empty %}
+                 <p>Популярдуу азыктар азырынча жок.</p>
+             {% endfor %}
+         </div>
+    </section>
+
+    {# 3. Арзандатуулар Бөлүмү (Ушул эле карточкалар менен) #}
+    <section class="section-discounts">
+         <h2>Арзандатуулар</h2>
+          <div class="category-grid-glovo product-list-as-category">
+            {% for product in discounted_products %}
+                {# ----- 👇👇👇 БУЛ САТЫР ОҢДОЛДУ 👇👇👇 ----- #}
+                <a href="{{ product.get_absolute_url }}" class="category-card-glovo product-card-like-category">
+                {# ----- 👆👆👆 Бул product.get_absolute_url() колдонот 👆👆👆 ----- #}
+                      <div class="img-container product-image">
+                          {% if product.image %}
+                          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                          {% else %}
+                              <div class="placeholder-product">🛒</div>
+                          {% endif %}
+                          {% if product.discount_percent > 0 %} {# Арзандатуу белгиси #}
+                            <span class="discount-badge-on-card">-{{ product.discount_percent }}%</span>
+                          {% endif %}
+                      </div>
+                       <span class="name product-name">{{ product.name }}</span>
+                       <span class="price product-price">
+                           <span class="original-price">{{ product.price }} сом</span>
+                           {{ product.get_discounted_price }} сом
+                           {# / кг / даана ж.б. кошуу #}
+                           <span class="weight-unit"> / {{ product.weight_unit }}</span>
+                       </span>
+                 </a>
+            {% empty %}
+                <p>Азыркы учурда арзандатуулар жок.</p>
+            {% endfor %}
+         </div>
+    </section>
+
+    {# Башка мазмун... #}
+
+{% endblock %}

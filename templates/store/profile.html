@@ -1,0 +1,55 @@
+{# store/templates/store/profile.html #}
+{% extends "store/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Менин профилим" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Менин профилим" %}</h1>
+
+    {# Колдонуучунун негизги маалыматы #}
+    <div class="profile-info" style="margin-bottom: 30px; padding: 15px; background-color: #f8f9fa; border: 1px solid #eee; border-radius: 5px;">
+        <p><strong>{% trans "Колдонуучу аты" %}:</strong> {{ user.username }}</p>
+        {% if user.first_name or user.last_name %}
+            <p><strong>{% trans "Аты-жөнү" %}:</strong> {{ user.get_full_name }}</p> {# user.first_name жана user.last_name бириктирет #}
+        {% endif %}
+        <p><strong>{% trans "Email дареги" %}:</strong> {{ user.email }}</p>
+        {# TODO: Профилди түзөтүү үчүн шилтеме кошуу #}
+        {# <p><a href="#">Профилди түзөтүү</a></p> #}
+    </div>
+
+    {# Колдонуучунун буйрутмаларынын тизмеси #}
+    <h2>{% trans "Менин буйрутмаларым" %}</h2>
+    <div class="order-history">
+        {% if orders %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="text-align: left; padding: 8px; border-bottom: 2px solid #dee2e6;">{% trans "Буйрутма ID" %}</th>
+                        <th style="text-align: left; padding: 8px; border-bottom: 2px solid #dee2e6;">{% trans "Датасы" %}</th>
+                        <th style="text-align: right; padding: 8px; border-bottom: 2px solid #dee2e6;">{% trans "Жалпы сумма" %}</th>
+                        <th style="text-align: center; padding: 8px; border-bottom: 2px solid #dee2e6;">{% trans "Статусу" %}</th>
+                        {# <th style="text-align: center; padding: 8px; border-bottom: 2px solid #dee2e6;">Аракеттер</th> #}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee;">#{{ order.id }}</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ order.created_at|date:"d M Y, H:i" }}</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">{{ order.total_amount }} сом</td>
+                            {# Статустун котормосун көрсөтүү #}
+                            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">{{ order.get_status_display }}</td>
+                            {# TODO: Буйрутманын деталдарын көрүү үчүн шилтеме #}
+                            {# <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;"><a href="#">Көрүү</a></td> #}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>{% trans "Сизде азырынча буйрутмалар жок." %}</p>
+        {% endif %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{# templates/registration/logged_out.html #}
+{% extends "store/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Сайттан чыгуу" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Сайттан чыгуу" %}</h1>
+    <p>{% trans "Сиз ийгиликтүү чыктыңыз. Кайра кирүү үчүн төмөнкү шилтемени басыңыз." %}</p>
+    <p><a href="{% url 'login' %}">{% trans "Кайра кирүү" %}</a></p>
+{% endblock %}

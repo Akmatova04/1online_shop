@@ -1,0 +1,65 @@
+{# store/templates/store/search_results.html #}
+{% extends 'store/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+    {% if query %}'{{ query }}' боюнча издөө{% else %}Издөө{% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>
+        {% if query %}
+            "{% blocktrans with query=query %} '{{ query }}' боюнча издөө натыйжалары {% endblocktrans %}"
+        {% else %}
+            {% trans "Издөө натыйжалары" %}
+        {% endif %}
+    </h1>
+
+    {# Билдирүүлөрдү көрсөтүү #}
+    {% if messages %}
+        <ul class="messages" style="list-style: none; padding: 0; margin-bottom: 15px;">
+            {% for message in messages %}
+                 <li{% if message.tags %} class="{{ message.tags }}" style="padding: 10px; border-radius: 5px; margin-bottom: 5px; color: white; background-color: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'warning' %}#ffc107; color: black;{% elif message.tags == 'error' %}#dc3545{% else %}#17a2b8{% endif %};"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {# Табылган товарлардын тизмеси #}
+    <section class="search-results-list">
+        {% if results %}
+            <div class="category-grid-glovo product-list-as-category"> {# Категория барагындагыдай стиль #}
+                {% for product in results %}
+                    <a href="{{ product.get_absolute_url }}" class="category-card-glovo product-card-like-category">
+                          <div class="img-container product-image">
+                              {% if product.image %}
+                                  <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                              {% else %}
+                                  <div class="placeholder-product">🛒</div>
+                              {% endif %}
+                              {% if product.discount_percent > 0 %}
+                                  <span class="discount-badge-on-card">-{{ product.discount_percent }}%</span>
+                              {% endif %}
+                          </div>
+                           <span class="name product-name">{{ product.name }}</span>
+                           <span class="price product-price">
+                               {% if product.discount_percent > 0 %}
+                                   <span class="original-price">{{ product.price }} сом</span>
+                               {% endif %}
+                               {{ product.get_discounted_price }} сом
+                               <span class="weight-unit"> / {{ product.weight_unit }}</span>
+                           </span>
+                     </a>
+                {% endfor %}
+            </div>
+        {% elif query %} {# Эгер издеген сөз бар, бирок натыйжа жок болсо #}
+             {# Бул билдирүү messages аркылуу деле чыгат, бирок бул жерде да калтырса болот #}
+            {# <p>{% blocktrans with query=query %}Тилекке каршы, '{{ query }}' боюнча эч нерсе табылган жок.{% endblocktrans %}</p> #}
+        {% endif %}
+    </section>
+
+    <div style="margin-top: 30px;">
+        <a href="{% url 'store:home' %}">⇐ Башкы бетке кайтуу</a>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{# store/templates/store/checkout.html #}
+{% extends "store/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Буйрутма берүү" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Буйрутма берүү" %}</h1>
+
+    {# Билдирүүлөрдү көрсөтүү (мис., формада ката болсо) #}
+    {% if messages %}
+        <ul class="messages" style="list-style: none; padding: 0; margin-bottom: 15px;">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" style="padding: 10px; border-radius: 5px; margin-bottom: 5px; color: white; background-color: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'warning' %}#ffc107; color: black;{% elif message.tags == 'error' %}#dc3545{% else %}#17a2b8{% endif %};"{% endif %}>
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {# Себеттеги товарлардын кыскача тизмеси #}
+    <div class="order-summary" style="margin-bottom: 30px; padding: 15px; background-color: #f8f9fa; border: 1px solid #eee; border-radius: 8px;">
+        <h3>{% trans "Сиздин буйрутмаңыз" %}</h3>
+        <ul style="list-style: none; padding: 0;">
+            {% for item in cart %}
+                <li style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dotted #ccc;">
+                    <span>{{ item.quantity }} x {{ item.product.name }}</span>
+                    <span>{{ item.total_price }} сом</span>
+                </li>
+            {% endfor %}
+             {# --- Жалпы сумма сабы (Толукталды) --- #}
+             <li style="display: flex; justify-content: space-between; padding: 10px 0; font-weight: bold; font-size: 1.1em; border-top: 1px solid #ccc; margin-top: 5px;">
+                <span>{% trans "Жалпы сумма" %}:</span>
+                <span>{{ cart.get_total_price }} сом</span>
+             </li>
+             {# ------------------------------------ #}
+        </ul>
+    </div>
+
+    {# Жеткирүү маалыматын киргизүү формасы #}
+    <div class="checkout-form-container">
+        <h2>{% trans "Жеткирүү маалыматын толтуруңуз" %}</h2>
+        <form action="{% url 'store:order_create' %}" method="post" class="order-form"> {# Ушул эле баракка кайра жөнөтөт #}
+            {% csrf_token %}
+
+            {# Форманын талааларын бир-бирден көрсөтүү #}
+            {% for field in form %}
+                <div style="margin-bottom: 15px;">
+                    <label for="{{ field.id_for_label }}" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                        {{ field.label }}
+                        {% if field.field.required %}<span style="color: red;">*</span>{% endif %} {# Милдеттүү талаа белгиси #}
+                    </label>
+                    {# Талаанын өзү (input, textarea ж.б.) #}
+                    {{ field }}
+                    {# Эгер талаада ката болсо көрсөтүү #}
+                    {% if field.errors %}
+                        <div class="errors" style="color: red; font-size: 0.9em; margin-top: 5px;">{{ field.errors }}</div>
+                    {% endif %}
+                     {# Эгер жардамчы текст болсо көрсөтүү #}
+                     {% if field.help_text %}
+                        <small class="help-text" style="color: grey; display: block; margin-top: 4px;">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            {# Буйрутманы жөнөтүү баскычы #}
+            <button type="submit" style="padding: 12px 25px; background-color: #007bff; color: white; border: none; border-radius: 5px; font-size: 1.1em; cursor: pointer; margin-top: 10px;">
+                {% trans "Буйрутманы тастыктоо" %}
+            </button>
+        </form>
+    </div>
+
+{# ----- 👇👇👇 УШУЛ САП ӨТӨ МААНИЛҮҮ 👇👇👇 ----- #}
+{% endblock %}
+{# ----- 👆👆👆 {% block content %}'ти жабат 👆👆👆 ----- #}

@@ -1,0 +1,114 @@
+{# store/templates/store/base.html #}
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="kg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    {# --- Google Fonts --- #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {# --- Негизги CSS --- #}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    {# --- Кошумча head элементтери --- #}
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    {# --- Сайттын Башы (Header) --- #}
+    <header>
+        <nav class="main-nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <a href="{% url 'store:home' %}"> <span class="logo-part1">АЗЫК</span><span class="logo-part2"> ДҮКӨН</span></a> {# Логотипке стил үчүн span коштук #}
+                </div>
+                <div class="nav-links">
+                    <a href="{% url 'store:home' %}" class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                        {% trans "Башкы бет" %}
+                    </a>
+                    <a href="{% url 'store:cart_detail' %}" class="nav-item {% if request.resolver_match.url_name == 'cart_detail' %}active{% endif %}">
+                        {% trans "Себет" %}
+                        {% if cart|length > 0 %}
+                            <span class="cart-count">
+                                {{ cart|length }}
+                            </span>
+                        {% endif %}
+                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'store:profile' %}" class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                             {% blocktrans with username=user.username %}Салам, {{ username }}{% endblocktrans %}
+                        </a>
+                        <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0; padding: 0;">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-item">
+                                {% trans "Чыгуу" %}
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="nav-item {% if 'login' in request.path %}active{% endif %}">{% trans "Кирүү" %}</a>
+                        <a href="{% url 'store:signup' %}" class="nav-item {% if request.resolver_match.url_name == 'signup' %}active{% endif %}">{% trans "Катталуу" %}</a>
+                    {% endif %}
+                </div>
+
+                <div class="search-form-container">
+                    <form method="get" action="{% url 'store:search_results' %}" >
+                        <input type="text" name="q" placeholder="Товар издөө..." required class="search-input">
+                        <button type="submit" class="search-button">
+                            Издөө
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+    {# --- Сайттын Башы Аягы --- #}
+
+
+    {# --- Негизги Мазмун Бөлүмү --- #}
+    <main class="container">
+        {# Колдонуучуга билдирүүлөр (messages) үчүн орун #}
+        {% if messages %}
+            <div class="messages-container" style="padding-top: 15px;"> {# Контейнердин ичинде, бирок контенттен мурун #}
+                <ul class="messages">
+                     {% for message in messages %} <li class="{{ message.tags }}">{{ message }}</li> {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% block content %}
+            {# Башка шаблондордун мазмуну бул жерге келет #}
+        {% endblock %}
+    </main>
+    {# --- Негизги Мазмун Аягы --- #}
+
+
+    {# --- Сайттын Төмөнкү Бөлүгү (Footer) --- #}
+    <footer>
+       
+        <nav>
+            {# ----- 👇👇👇 ШИЛТЕМЕЛЕР ӨЗГӨРТҮЛДҮ 👇👇👇 ----- #}
+            <a href="{% url 'store:about' %}">{% trans "Биз жөнүндө" %}</a> |
+          
+            {# --- Социалдык тармактар --- #}
+           
+            <a href="https://wa.me/996990686854" target="_blank" rel="noopener noreferrer">WhatsApp</a> | {# Номериңиз #}
+            <a href="https://www.instagram.com/akmatova._.n/" target="_blank" rel="noopener noreferrer">Instagram</a> | {# Username #}
+            <a href="https://t.me/Акматова Назира" target="_blank" rel="noopener noreferrer">Telegram</a> {# Username #}
+             {# ----- 👆👆👆 -------------------------- 👆👆👆 ----- #}
+        </nav>
+        <p>© {% now "Y" %} Азык Дүкөн. {% trans "Бардык укуктар корголгон." %}</p>
+    </footer>
+    {# --- Сайттын Төмөнкү Бөлүгү Аягы --- #}
+
+
+    
+
+</body>
+</html>

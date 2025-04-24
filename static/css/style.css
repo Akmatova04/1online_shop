@@ -1,0 +1,288 @@
+/* static/css/style.css - АЗЫК ДҮКӨН үчүн ылайыкташтырылган Dark Mode */
+
+/* --- Негизги жана Жалпы Стилдер (Dark Mode) --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif; /* Жаңы шрифт (интернеттен жүктөлөт) */
+    /* Эгер Montserrat жок болсо, sans-serif колдонулат */
+    line-height: 1.6;
+    color: #cccccc; /* Негизги ачык боз текст */
+    background-color: #12181f; /* Кочкул көгүш кара фон */
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Негизги мазмун контейнери үчүн фонду алып салабыз, body'нин фону көрүнөт */
+main.container {
+    margin-top: 25px;
+    margin-bottom: 35px;
+    /* background-color: #ffffff; <-- Ак фонду алып салдык */
+    padding-top: 20px;
+    padding-bottom: 30px;
+    /* border-radius: 8px; */ /* Жумурулукту алып салабыз */
+    /* box-shadow: 0 2px 8px rgba(0,0,0,0.06); */ /* Көлөкөнү алып салабыз */
+}
+
+
+/* Баш аттар (Dark Mode) */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+    color: #ffffff; /* Ак баш аттар */
+    font-weight: 700; /* Калыңыраак */
+    line-height: 1.3;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 45px;
+    font-size: 2.5em; /* Бир аз чоңураак */
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.9em;
+    border-bottom: 2px solid #20C997; /* Жашыл сызык */
+    padding-bottom: 12px;
+    
+}
+/* h2'ни ортого жылдыруу үчүн ата-энесине text-align: center; бериш керек */
+.center-heading { /* Мисалы, <div class="center-heading"><h2>...</h2></div> */
+     text-align: center;
+}
+
+
+/* Жалпы шилтемелер (Dark Mode) */
+a {
+    color: #20C997; /* Бирюза түс */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+a:hover {
+    color: #1ce0a5; /* Ачыгыраак бирюза */
+}
+
+button { cursor: pointer; font-family: inherit; }
+
+/* --- Навигация Менюсу (Dark Mode) --- */
+header {
+    background: rgba(26, 30, 35, 0.90); /* Жарым тунук кара фон (#1A1E23) */
+    border-bottom: 1px solid rgba(52, 58, 64, 0.6); /* Жарым тунук чек */
+    position: sticky; top: 0; z-index: 1020;
+    backdrop-filter: blur(8px); /* Фонду бүдөмүктөтүү */
+    -webkit-backdrop-filter: blur(8px);
+}
+
+nav.main-nav .nav-container {
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1100px; margin: 0 auto; padding: 0 15px; height: 65px;
+}
+
+/* Логотип үчүн жаңы стиль (Dark Mode) */
+nav.main-nav .logo a {
+    font-size: 1.8rem; /* Бир аз чоңураак */
+    font-weight: 700;
+    text-decoration: none;
+    line-height: 1;
+    color: #ffffff; /* Логотип ак */
+}
+nav.main-nav .logo a:hover { color: #e0e0e0; } /* Курсордо бир аз бозорот */
+/* Эгер логотип эки бөлүктөн турса, класс кошуңуз: <span class="logo-part1">АЗЫК</span><span class="logo-part2"> ДҮКӨН</span> */
+.logo-part1 { color: #ffffff; }
+.logo-part2 { color: #20C997; margin-left: 2px; } /* Жашыл бөлүк */
+
+nav.main-nav .nav-links { display: flex; align-items: center; gap: 25px; }
+
+nav.main-nav .nav-item { /* Меню пункттары */
+    color: #ced4da; /* Ачыгыраак боз текст */
+    text-decoration: none; font-weight: 500; font-size: 1rem;
+    padding: 8px 12px; /* Бир аз кичирээк паддинг */
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    border-radius: 6px; /* Бир аз жумурулук */
+}
+nav.main-nav .nav-item:hover,
+nav.main-nav .nav-item.active {
+    color: #ffffff; /* Ак текст */
+    background-color: rgba(32, 201, 151, 0.15); /* Жеңил жашыл фон */
+    border-bottom-color: #20C997; /* Жашыл сызык */
+}
+nav.main-nav button.nav-item { vertical-align: baseline; } /* Чыгуу баскычы */
+
+/* Себеттин саны (Dark Mode) */
+.cart-count {
+    background-color: #e44d26; /* Кызыл кала берсин, көзгө урунат */ color: white;
+    border-radius: 50%; padding: 3px 7px; font-size: 0.75em; margin-left: 5px;
+    vertical-align: super; min-width: 18px; display: inline-block;
+    text-align: center; line-height: 1; font-weight: 600;
+}
+
+/* --- Издөө Формасы (Dark Mode) --- */
+.search-form-container { margin-left: auto; padding-left: 25px; }
+.search-form-container form { display: flex; align-items: center; }
+.search-form-container .search-input {
+    padding: 9px 12px; /* Бир аз бийигирээк */
+    border: 1px solid #495057; /* Кочкул боз чек */
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    min-width: 180px; font-size: 14px;
+    background-color: #212529; /* Кара фон */
+    color: #ced4da; /* Ачык текст */
+}
+.search-form-container .search-input::placeholder { color: #6c757d; }
+.search-form-container .search-input:focus {
+     border-color: #20C997; outline: 0; background-color: #1A1E23;
+     box-shadow: 0 0 0 3px rgba(32, 201, 151, 0.15); z-index: 2; position: relative;
+}
+.search-form-container .search-button {
+    padding: 9px 14px; background-color: #20C997; /* Жашыл фон */ color: #12181f; /* Кара текст */
+    border: 1px solid #20C997; border-radius: 0 6px 6px 0; cursor: pointer;
+    font-size: 14px; font-weight: 600; /* Текстти калыңдатуу */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.search-form-container .search-button:hover { background-color: #1ce0a5; border-color: #1ce0a5; }
+
+/* --- Glovo стилиндеги Карталар (ӨЗГӨРГӨН ЖОК) --- */
+/* Бул бөлүмдү сиз мурда берген коддон көчүрүп алыңыз */
+.section-categories-glovo, .section-popular, .section-discounts,
+.category-products-list, .search-results-list {
+    margin-top: 40px; margin-bottom: 40px;
+}
+.category-grid-glovo {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 25px;
+    padding: 15px 0;
+}
+.category-card-glovo {
+    display: block; text-decoration: none; color: #333; /* Картанын тексти кара бойдон */
+    background-color: #fff; /* Картанын фону ак бойдон */
+    border-radius: 10px; overflow: hidden; box-shadow: 0 3px 8px rgba(0,0,0,0.07);
+    transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out; text-align: center;
+}
+.category-card-glovo:hover { transform: translateY(-6px); box-shadow: 0 8px 16px rgba(0,0,0,0.12); }
+.category-card-glovo .img-container { width: 100%; padding-top: 80%; position: relative; background-color: #f8f9fa; }
+.category-card-glovo .img-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+.category-card-glovo .img-container .placeholder-icon,
+.category-card-glovo .img-container .placeholder-product { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3em; color: #dee2e6; }
+.category-card-glovo .name { display: block; padding: 12px 10px; font-weight: 600; font-size: 15px; line-height: 1.4; min-height: 45px; color: #343a40; /* Тексттин түсү */ }
+.product-card-like-category .product-name { padding-bottom: 6px; min-height: 40px; }
+.product-card-like-category .product-price { display: block; padding: 0 10px 12px 10px; font-size: 16px; font-weight: 700; color: #005b96; /* Баанын түсү көк бойдон */ }
+.product-card-like-category .original-price { text-decoration: line-through; color: #6c757d; font-weight: 400; font-size: 14px; margin-right: 6px; }
+.product-card-like-category .img-container .discount-badge-on-card { position: absolute; top: 10px; left: 10px; background-color: #e44d26; color: white; padding: 4px 7px; border-radius: 5px; font-size: 12px; font-weight: bold; z-index: 1; }
+.product-card-like-category .weight-unit { font-size: 14px; font-weight: 400; color: #6c757d; /* Өлчөм бирдигинин түсү */ }
+/* ------------------------------------------------------- */
+
+/* --- Товар жок деген жазуу (Dark Mode) --- */
+.category-grid-glovo p, .search-results-list p {
+    text-align: center; grid-column: 1 / -1; padding: 40px 15px;
+    color: #8892b0; /* Ачыгыраак боз */ font-style: italic; font-size: 1.1em;
+}
+
+/* --- Футер (Dark Mode) --- */
+footer {
+    text-align: center; padding: 40px 15px; margin-top: 60px;
+    border-top: 1px solid #343A40; /* Кочкул чек */
+    background-color: #1A1E23; /* Кара фон */
+    color: #8892b0; /* Боз текст */ font-size: 14px;
+}
+footer nav { margin-bottom: 15px; }
+footer nav a { color: #a8b2d1; text-decoration: none; margin: 0 12px; } /* Ачыгыраак шилтеме */
+footer nav a:hover { color: #20C997; } /* Жашыл hover */
+footer .footer-logo { font-weight: bold; font-size: 1.3em; margin-bottom: 15px; color: #ced4da; } /* Ачыгыраак логотип */
+footer p { margin-top: 15px; font-size: 0.9em; color: #6c757d; } /* Копирайт */
+
+/* --- Адаптивдүүлүк (Өзгөргөн жок, бирок текшерүү керек) --- */
+@media screen and (max-width: 992px) { .search-form-container { display: none; } }
+@media screen and (max-width: 768px) {
+    nav.main-nav .nav-container { height: auto; flex-direction: column; padding-top: 15px; padding-bottom: 15px; }
+    nav.main-nav .logo { margin-bottom: 15px; }
+    nav.main-nav .nav-links { gap: 10px 15px; flex-wrap: wrap; justify-content: center; margin-bottom: 10px; }
+    .category-grid-glovo { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
+    h1 { font-size: 1.9em; margin-bottom: 30px; }
+    h2 { font-size: 1.6em; margin-bottom: 20px;}
+    main.container { padding: 20px 15px; margin-top: 15px; }
+}
+
+/* --- Билдирүүлөр (Messages - Dark Mode) --- */
+ul.messages { list-style: none; padding: 0; margin: 0 0 20px 0; }
+ul.messages li { padding: 12px 18px; border-radius: 6px; margin-bottom: 12px; color: white; font-weight: 500; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+ul.messages li.success { background-color: #198754; } /* Кочкул жашыл */
+ul.messages li.warning { background-color: #ffca2c; color: #333; } /* Сары */
+ul.messages li.error { background-color: #dc3545; } /* Кызыл */
+ul.messages li.info { background-color: #0dcaf0; color: #12181f; } /* Ач көк */
+
+/* --- Формалардын стилдери (Dark Mode) --- */
+/* (Мисалы, checkout, login, signup барактары үчүн) */
+.form-container { /* Шаблондо форманы ушул класска орош керек */
+    background-color: #1A1E23; padding: 40px; border-radius: 10px;
+    border: 1px solid #343A40; max-width: 550px; margin: 40px auto;
+}
+.form-container h1, .form-container h2 { /* Форманын ичиндеги аталыштар */
+    text-align: center; margin-bottom: 30px; color: #ffffff; border: none; padding: 0;
+}
+.form-group { margin-bottom: 20px; } /* Форма талаасынын тобу */
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #adb5bd; font-size: 0.95rem; }
+.form-group input[type="text"], .form-group input[type="email"],
+.form-group input[type="password"], .form-group input[type="number"], /* number коштук */
+.form-group textarea, .form-group select { /* select коштук */
+    width: 100%; padding: 12px 15px; border: 1px solid #343A40; border-radius: 6px;
+    font-size: 1rem; font-family: inherit; background-color: #212529; color: #E0E0E0;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.form-group input::placeholder, .form-group textarea::placeholder { color: #6C757D; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: #20C997; outline: 0; background-color: #1A1E23;
+    box-shadow: 0 0 0 3px rgba(32, 201, 151, 0.15);
+}
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-group .errors, .form-group .help-text { font-size: 0.85rem; margin-top: 6px; }
+.form-group .errors { color: #ff6b6b; list-style: none; padding: 0; }
+.form-group .help-text { color: #8892b0; }
+
+/* Форма баскычы */
+.form-container button[type="submit"] {
+    display: block; width: 100%; /* Толук туурасына */
+    background: linear-gradient(to right, #20C997, #1ce0a5); color: #12181f;
+    padding: 14px 30px; border: none; border-radius: 50px; font-size: 1.1rem;
+    font-weight: 700; cursor: pointer; text-align: center; text-decoration: none !important;
+    transition: all 0.3s ease; box-shadow: 0 5px 18px rgba(32, 201, 151, 0.25); letter-spacing: 0.5px;
+    margin-top: 25px;
+}
+.form-container button[type="submit"]:hover {
+    background: linear-gradient(to right, #1ce0a5, #20C997);
+    transform: translateY(-3px); box-shadow: 0 8px 25px rgba(32, 201, 151, 0.35);
+}
+
+/* Башка барактарга шилтеме (мис., Кирүү -> Катталуу) */
+.form-link { text-align: center; margin-top: 30px; font-size: 0.95rem; color: #8892b0; }
+.form-link a { color: #20C997; font-weight: 600; }
+.form-link a:hover { color: #1ce0a5; }
+
+/* --- Башка Барактардын Стилдери --- */
+/* Продукт, Себет, Checkout, Профиль, Кирүү, Катталуу ж.б. барактарынын
+   ичиндеги элементтерге да Dark Mode стилдерин колдонуу керек болот.
+   Мисалы, таблицалар, тексттер, фондор ж.б.
+   Азырынча бул жерге негизгилерин коштук. */
+
+/* Мисал: Профиль барагындагы таблица */
+.order-history table { color: #cccccc; }
+.order-history thead th { background-color: #1A1E23; border-bottom-color: #343A40; color: #ffffff;}
+.order-history tbody td { border-bottom-color: #343A40; }
+.order-history tbody tr:hover td { background-color: rgba(45, 52, 59, 0.5); } /* Курсордо фон */

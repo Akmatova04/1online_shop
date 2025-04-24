@@ -1,0 +1,148 @@
+{# store/templates/store/product_detail.html #}
+{% extends 'store/base.html' %}
+{% load static %}
+{% load i18n %} {# Билдирүүлөрдү которуу үчүн #}
+
+{% block title %}{{ product.name }} - Дүкөн{% endblock %}
+
+{% block content %}
+    {# Колдонуучуга билдирүүлөрдү көрсөтүү (мис., пикир/себетке кошулганда) #}
+    {% if messages %}
+        <ul class="messages" style="list-style: none; padding: 0; margin-bottom: 15px;">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" style="padding: 10px; border-radius: 5px; margin-bottom: 5px; color: white; background-color: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'warning' %}#ffc107; color: black;{% elif message.tags == 'error' %}#dc3545{% else %}#17a2b8{% endif %};"{% endif %}>
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="product-detail-container" style="display: flex; flex-wrap: wrap; gap: 30px;">
+
+        {# Сол жак: Сүрөт #}
+        <div class="product-image-section" style="flex: 1; min-width: 280px;">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            {% else %}
+                <div style="width: 100%; height: 300px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                    <span style="font-size: 3em; color: #ccc;">🛒</span>
+                </div>
+            {% endif %}
+        </div>
+
+        {# Оң жак: Маалымат, баа, баскыч #}
+        <div class="product-info-section" style="flex: 2; min-width: 300px;">
+            <h1>{{ product.name }}</h1>
+
+            <div class="price-section" style="margin: 20px 0;">
+                <span class="current-price" style="font-size: 2em; font-weight: bold; color: #005b96;">
+                    {{ product.get_discounted_price }} сом
+                </span>
+                {% if product.discount_percent > 0 %}
+                    <span class="original-price" style="text-decoration: line-through; color: #999; margin-left: 10px; font-size: 1.2em;">
+                        {{ product.price }} сом
+                    </span>
+                    <span class="discount-badge" style="background-color: #e44d26; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.9em; font-weight: bold; margin-left: 10px;">
+                        -{{ product.discount_percent }}%
+                    </span>
+                {% endif %}
+                <span class="weight-unit" style="font-size: 1.2em; color: #555; margin-left: 5px;">
+                     / {{ product.weight_unit }}
+                </span>
+            </div>
+
+            {# --- СЕБЕТКЕ КОШУУ ФОРМАСЫ (ОҢДОЛДУ) --- #}
+            <div class="add-to-cart-section" style="margin-bottom: 25px;">
+                <form action="{% url 'store:cart_add' product.id %}" method="post" style="display: flex; align-items: center;"> {# Форманы горизонталдуу кылуу үчүн стиль #}
+                    {% csrf_token %} {# Коопсуздук үчүн #}
+
+                    {# Санды киргизүү талаасы (views.py'дан келген cart_product_form колдонот) #}
+                    {{ cart_product_form.quantity }}
+
+                    {# Себетке кошуу баскычы #}
+                    <button type="submit" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 1.1em; cursor: pointer;">
+                        {% trans "Себетке кошуу" %}
+                    </button>
+                     {# Форманын жашыруун 'update' талаасы #}
+                     {{ cart_product_form.update }}
+                </form>
+            </div>
+            {# ---------------------------------------- #}
+
+            {# Сүрөттөмөсү #}
+            <div class="description-section">
+                <h3>{% trans "Товар жөнүндө" %}</h3>
+                <p style="line-height: 1.6; color: #444;">
+                    {{ product.description|default:_("Сүрөттөмөсү азырынча жок.")|linebreaksbr }}
+                </p>
+            </div>
+
+            {# Категорияга шилтеме #}
+             <p style="margin-top: 15px; font-size: 0.9em;">
+                 <strong>{% trans "Категориясы" %}:</strong>
+                 <a href="{% url 'store:category_products' category_slug=product.category.slug %}">{{ product.category.name }}</a>
+             </p>
+
+        </div>
+    </div>{# product-detail-container аягы #}
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
+
+    {# --- Пикирлер Бөлүмү --- #}
+    <div class="reviews-section">
+        <h2>{% trans "Пикирлер" %} ({{ reviews.count }})</h2>
+
+        {# Пикир калтыруу формасы #}
+        <div class="add-review-form" style="margin-bottom: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #eee;">
+            <h3>{% trans "Пикир калтыруу" %}</h3>
+            {% if request.user.is_authenticated %}
+                <form method="post" action="{% url 'store:product_detail' product_slug=product.slug %}"> {# Форма ушул эле баракка жөнөтүлөт #}
+                    {% csrf_token %} {# Коопсуздук үчүн #}
+
+                    {# Пикир формасынын талаалары (views.py'дан келген review_form колдонот) #}
+                    <div style="margin-bottom: 15px;">
+                        <label for="{{ review_form.rating.id_for_label }}">{{ review_form.rating.label }}</label>
+                        {{ review_form.rating }}
+                        {% if review_form.rating.errors %}
+                            <div style="color: red; font-size: 0.9em; margin-top: 5px;">{{ review_form.rating.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                         <label for="{{ review_form.comment.id_for_label }}">{{ review_form.comment.label }}</label>
+                        {{ review_form.comment }}
+                         {% if review_form.comment.errors %}
+                            <div style="color: red; font-size: 0.9em; margin-top: 5px;">{{ review_form.comment.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">{% trans "Пикирди жөнөтүү" %}</button>
+                </form>
+            {% else %}
+                 {# TODO: Логин барагына туура шилтеме коюу ('accounts:login' сыяктуу) #}
+                <p>{% blocktrans %}Пикир калтыруу үчүн, сураныч, <a href="#">сайтка кириңиз</a>.{% endblocktrans %}</p>
+            {% endif %}
+        </div>
+
+        {# Эски пикирлердин тизмеси #}
+        <div class="review-list">
+            {% for review in reviews %}
+                <div class="review-item" style="border-bottom: 1px solid #eee; padding: 15px 0; margin-bottom: 15px;">
+                    <p>
+                        <strong>{{ review.user.username }}</strong>
+                        <span style="color: #ffc107; margin-left: 10px;">
+                            {# Рейтингди жылдызча кылып көрсөтүү #}
+                            {% with ''|center:review.rating as range %}{% for _ in range %}⭐{% endfor %}{% endwith %}
+                            ({{ review.rating }}/5)
+                        </span>
+                        <small style="color: #888; float: right;">{{ review.created_at|date:"d M Y, H:i" }}</small> {# Датасы #}
+                    </p>
+                    <p style="margin-top: 5px; color: #555;">{{ review.comment|linebreaksbr }}</p>
+                </div>
+            {% empty %}
+                <p>{% trans "Бул товарга азырынча пикирлер жок." %}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {# --- Пикирлер Бөлүмү Аягы --- #}
+
+{% endblock %}

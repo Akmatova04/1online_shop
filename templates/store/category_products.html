@@ -1,0 +1,64 @@
+{# store/templates/store/category_products.html #}
+{% extends 'store/base.html' %} {# Негизги шаблонду мурастайбыз #}
+{% load static %} {# Статикалык файлдарды колдонуу үчүн #}
+
+{# Барактын аталышын категориянын аты менен коёбуз #}
+{% block title %}{{ category.name }} - Товарлар{% endblock %}
+
+{% block content %}
+    {# Категориянын аталышын чоң кылып көрсөтөбүз #}
+    <h1>{{ category.name }}</h1>
+
+    {# Эгер кааласаңыз, категориянын сүрөтүн да кошо аласыз #}
+     {% if category.image %}
+        <img src="{{ category.image.url }}" alt="{{ category.name }}" style="max-height: 150px; margin-bottom: 20px;">
+    {% endif %} 
+
+    {# Товарлардын тизмесин көрсөтүүчү бөлүм #}
+    <section class="category-products-list">
+        {% if products %} {# Эгер бул категорияда товарлар бар болсо #}
+            <h2>Бул категориядагы товарлар:</h2>
+            {# Башкы беттегидей эле торчо (grid) стилин колдонобуз #}
+            <div class="category-grid-glovo product-list-as-category">
+                {% for product in products %}
+                    {# Ар бир товар үчүн карточка (башкы беттегидей) #}
+                    {# ----- 👇👇👇 БУЛ САТЫР ОҢДОЛДУ 👇👇👇 ----- #}
+                    <a href="{{ product.get_absolute_url }}" class="category-card-glovo product-card-like-category">
+                    {# ----- 👆👆👆 Бул product.get_absolute_url() колдонот 👆👆👆 ----- #}
+                          <div class="img-container product-image">
+                              {% if product.image %}
+                                  <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                              {% else %}
+                                  <div class="placeholder-product">🛒</div>
+                              {% endif %}
+                              {# Арзандатуу белгиси (эгер бар болсо) #}
+                              {% if product.discount_percent > 0 %}
+                                  <span class="discount-badge-on-card">-{{ product.discount_percent }}%</span>
+                              {% endif %}
+                          </div>
+                           <span class="name product-name">{{ product.name }}</span>
+                           <span class="price product-price">
+                               {# Эски баа (эгер арзандатуу болсо) #}
+                               {% if product.discount_percent > 0 %}
+                                   <span class="original-price">{{ product.price }} сом</span>
+                               {% endif %}
+                               {# Жаңы же негизги баа #}
+                               {{ product.get_discounted_price }} сом
+                               {# / кг / даана ж.б. кошуу #}
+                               <span class="weight-unit"> / {{ product.weight_unit }}</span>
+                           </span>
+                     </a>
+                {% endfor %}
+            </div>
+        {% else %} {# Эгер бул категорияда товарлар жок болсо #}
+            {# Бул жазууну ортого коюу үчүн CSS кошконбуз (эгер .category-grid-glovo p эрежеси иштесе) #}
+            <p>Бул категорияда азырынча товарлар жок.</p>
+        {% endif %}
+    </section>
+
+    {# Башкы бетке кайтуу үчүн шилтеме #}
+    <div style="margin-top: 30px;">
+        <a href="{% url 'store:home' %}">⇐ Башкы бетке кайтуу</a>
+    </div>
+
+{% endblock %}

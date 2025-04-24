@@ -1,0 +1,90 @@
+{# store/templates/store/cart_detail.html #}
+{% extends "store/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Сиздин соода себетиңиз" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Сиздин соода себетиңиз" %}</h1>
+
+    {% if messages %}
+        <ul class="messages" style="list-style: none; padding: 0; margin-bottom: 15px;">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" style="padding: 10px; border-radius: 5px; margin-bottom: 5px; color: white; background-color: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'warning' %}#ffc107; color: black;{% elif message.tags == 'error' %}#dc3545{% else %}#17a2b8{% endif %};"{% endif %}>
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if cart %} {# Эгер себетте товар бар болсо #}
+        <table class="cart" style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+                <tr>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid #dee2e6;">{% trans "Сүрөт" %}</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid #dee2e6;">{% trans "Товар" %}</th>
+                    <th style="text-align: center; padding: 8px; border-bottom: 2px solid #dee2e6;">{% trans "Саны" %}</th>
+                    <th style="text-align: right; padding: 8px; border-bottom: 2px solid #dee2e6;">{% trans "Бирдигинин баасы" %}</th>
+                    <th style="text-align: right; padding: 8px; border-bottom: 2px solid #dee2e6;">{% trans "Жалпы баасы" %}</th>
+                    <th style="text-align: center; padding: 8px; border-bottom: 2px solid #dee2e6;">{% trans "Өчүрүү" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %} {# Себеттеги ар бир товар үчүн сап #}
+                    {% with product=item.product %} {# Продукт объектисин алуу #}
+                        <tr>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee;">
+                                <a href="{{ product.get_absolute_url }}">
+                                    {% if product.image %}
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="height: 50px; width: auto;">
+                                    {% else %}
+                                        🛒
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee;">
+                                <a href="{{ product.get_absolute_url }}" style="color: #005b96; text-decoration: none;">{{ product.name }}</a>
+                            </td>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">
+                                {# Санды жаңыртуу формасы #}
+                                <form action="{% url 'store:cart_add' product.id %}" method="post" style="display: inline-flex; align-items: center;">
+                                    {{ item.update_quantity_form.quantity }} {# Сан талаасы #}
+                                    {{ item.update_quantity_form.update }} {# Жашыруун update=True талаасы #}
+                                    {% csrf_token %}
+                                    <button type="submit" style="padding: 5px 10px; margin-left: 5px; cursor: pointer;">{% trans "Жаңырт" %}</button>
+                                </form>
+                            </td>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">{{ item.price }} сом</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">{{ item.total_price }} сом</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">
+                                {# Өчүрүү формасы #}
+                                <form action="{% url 'store:cart_remove' product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" style="color: red; background: none; border: none; cursor: pointer; font-size: 1.2em;">×</button> {# × белгиси #}
+                                </form>
+                            </td>
+                        </tr>
+                    {% endwith %}
+                {% endfor %}
+                <tr class="total" style="background-color: #f8f9fa;">
+                    <td colspan="4" style="padding: 12px 8px; text-align: right; font-weight: bold;">{% trans "Жалпы сумма" %}:</td>
+                    <td colspan="2" style="padding: 12px 8px; text-align: right; font-weight: bold; font-size: 1.2em;">{{ cart.get_total_price }} сом</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="cart-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+            <a href="{% url 'store:home' %}" class="button" style="padding: 10px 15px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 5px;">
+                {% trans "Сооданы улантуу" %}
+                <a href="{% url 'store:order_create' %}" class="button" style="padding: 10px 15px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">
+                    {% trans "Буйрутма берүү" %}
+                </a>
+        </div>
+
+    {% else %} {# Эгер себет бош болсо #}
+         <p>{% trans "Сиздин себетиңиз бош." %}</p>
+         <p><a href="{% url 'store:home' %}">{% trans "Дүкөнгө кайтуу" %}</a></p>
+    {% endif %}
+
+{% endblock %}
