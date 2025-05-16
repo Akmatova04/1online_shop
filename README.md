@@ -83,8 +83,14 @@ This project is a web application for a grocery store 🥦. Users can browse pro
 - 👩 Nazira Akmatova – [akmatova1804@gmail.com]  
 - 💼 LinkedIn (optional)
 
----
+---:
 
+🌐 Check out my website:
+👉 https://nazira.pythonanywhere.com/
+
+Hi friends! 👋
+I'm learning web development, and this is one of my beginner projects using Python and Django.
+Feel free to explore and let me know what you think!
 
 ## 🛒 Grocery Store Screenshot
 
