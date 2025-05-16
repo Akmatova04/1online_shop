@@ -81,9 +81,7 @@ This project is a web application for a grocery store 🥦. Users can browse pro
 ## 📬 Contact
 
 - 👩 Nazira Akmatova – [akmatova1804@gmail.com]  
-- 💼 LinkedIn (optional)
 
----:
 
 🌐 Check out my website:
 👉 https://nazira.pythonanywhere.com/
